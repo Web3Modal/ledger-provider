@@ -1,7 +1,10 @@
 import Web3ProviderEngine from 'web3-provider-engine';
 // @ts-ignore
 import CacheSubprovider from 'web3-provider-engine/subproviders/cache.js';
-import { ledgerEthereumBrowserClientFactoryAsync } from '@0x/subproviders/lib/src';
+import {
+  ledgerEthereumBrowserClientFactoryAsync,
+  LedgerEthereumClientFactoryAsync,
+} from '@0x/subproviders/lib/src';
 import { LedgerSubprovider } from '@0x/subproviders/lib/src/subproviders/ledger';
 import { RPCSubprovider } from '@0x/subproviders/lib/src/subproviders/rpc_subprovider';
 
@@ -12,6 +15,7 @@ export interface ILedgerProviderOptions {
   baseDerivationPath?: any;
   pollingInterval?: any;
   requestTimeoutMs?: any;
+  ledgerEthereumClientFactoryAsync?: LedgerEthereumClientFactoryAsync;
 }
 
 class LedgerProvider extends Web3ProviderEngine {
@@ -22,7 +26,9 @@ class LedgerProvider extends Web3ProviderEngine {
     this.addProvider(
       new LedgerSubprovider({
         networkId: opts.chainId,
-        ledgerEthereumClientFactoryAsync: ledgerEthereumBrowserClientFactoryAsync,
+        ledgerEthereumClientFactoryAsync:
+          opts.ledgerEthereumClientFactoryAsync ||
+          ledgerEthereumBrowserClientFactoryAsync,
         accountFetchingConfigs: opts.accountFetchingConfigs,
         baseDerivationPath: opts.baseDerivationPath,
       })
